@@ -11,10 +11,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./select";
-import { fetchBookByCategoryId } from "@/services/bookService";
-import { fetchCartoonByGenreId } from "@/services/cartoonService";
 
-export default function FilterItem({ categories, path }) {
+export default function FilterItem({ categories }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -25,11 +23,11 @@ export default function FilterItem({ categories, path }) {
   const selectedId = bookCategoryId || cartoonGenreId;
 
   useEffect(() => {
-    if (path === "/") {
+    if (pathname === "/") {
       setHeaderTitle("Homepage");
-    } else if (path.includes("/book-categories")) {
+    } else if (pathname.includes("/book-categories")) {
       setHeaderTitle("All Books");
-    } else if (path.includes("/old-school-cartoons")) {
+    } else if (pathname.includes("/old-school-cartoons")) {
       setHeaderTitle("Old School Cartoons");
     }
 
@@ -41,7 +39,7 @@ export default function FilterItem({ categories, path }) {
         setHeaderTitle(name);
       }
     }
-  }, [path, selectedId, categories]);
+  }, [pathname, selectedId, categories]);
 
   const getCategoryName = (category) => {
     if (pathname.includes("/book-categories")) {
@@ -70,13 +68,13 @@ export default function FilterItem({ categories, path }) {
   return (
     <>
       <div className="flex justify-between">
-        <div className="hidden md:block max-w-60 h-10 py-2 px-4 rounded-md shadow-sm border-separate border-[1.7px] border-zinc-200">
+        <div className="hidden md:block max-w-3xl h-10 py-2 px-4 rounded-md shadow-sm border-separate border-[1.7px] border-zinc-200">
           <p className="text-center font-bold text-[var(--second)]">
             {headerTitle}
           </p>
         </div>
         <div className="w-48">
-          {path !== "/" && categories && categories.length > 0 && (
+          {pathname !== "/" && categories && categories.length > 0 && (
             <Select
             value={selectedId || ""}
               onValueChange={handleCategorySelect}

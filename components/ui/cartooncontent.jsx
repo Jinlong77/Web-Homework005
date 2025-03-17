@@ -1,15 +1,26 @@
 import Image from "next/image";
 import { Separator } from "./separator";
-import { fetchCartoonAll } from "@/services/cartoonService";
 import Link from "next/link";
 
-export default async function CartoonContent() {
-  const api = await fetchCartoonAll();
-  const cartoon = api?.payload || [];
+export default function CartoonPage({ cartoons, id, searchQuery }) {
+  const genreId = id ? Number(id) : null;
+  let cartoonsFilter = [];
+
+  if (id) {
+    cartoonsFilter = cartoons.filter((cartoon) => {
+      return cartoon.ct_genre_id === genreId;
+    });
+  } else if (searchQuery) {
+    cartoonsFilter = cartoons.filter((cartoon) => {
+      return cartoon.ct_title.toLowerCase().includes(searchQuery.toLowerCase());
+    });
+  } else {
+    cartoonsFilter = cartoons;
+  }
 
   return (
     <div className="w-fit mx-auto grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 items-center justify-center gap-y-20 gap-x-14 mt-10 max-h-[calc(100vh-20rem)] md:max-h-[calc(100vh-27rem)] overflow-auto">
-      {cartoon?.map((cartoon) => (
+      {cartoonsFilter.map((cartoon) => (
         <div key={cartoon.id}>
           <CartoonCard cartoon={cartoon} />
         </div>
@@ -25,7 +36,7 @@ function CartoonCard({ cartoon }) {
     /%20/g,
     "+"
   );
-  
+
   const encodedName = "old+school+cartoons";
 
   const articleUrl = `/read-full-article/${cartoon.id}?type=${type}&name=${encodedName}&title=${encodedTitle}`;

@@ -1,13 +1,10 @@
-"use client";
 
 import Image from "next/image";
 import { Button } from "./button";
 import { Card } from "./card";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 
-export default function BookCard3DPage({ books }) {
-  const id = useSearchParams().get("query");
+export default function BookCard3DPage({ books, id, searchQuery }) {
   const categoryId = id ? Number(id) : null;
 
   let bookFilter = [];
@@ -15,6 +12,10 @@ export default function BookCard3DPage({ books }) {
   if (id) {
     bookFilter = books.filter((book) => {
       return book.book_cate_id === categoryId;
+    });
+  } else if (searchQuery) {
+    bookFilter = books.filter((book) => {
+      return book.book_title.toLowerCase().includes(searchQuery.toLowerCase());
     });
   } else {
     bookFilter = books;

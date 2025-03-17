@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { fetchCartoonById } from "@/services/cartoonService";
 import { fetchBookById } from "@/services/bookService";
+import { Skeleton } from "./skeleton";
 
 export default function DetailContent({ id }) {
   const path = useSearchParams();
@@ -29,17 +29,25 @@ export default function DetailContent({ id }) {
   return (
     <>
       <div className="overflow-hidden relative">
-        <p className="text-2xl font-bold line-clamp-1">
-          {item?.ct_title ?? item?.book_title}
-        </p>
-        <p className="text-xl">
-          by{" "}
-          <span className="text-[var(--second)] font-semibold">
-            {item?.book_author ?? item?.ct_creator}
-          </span>
-        </p>
-        {type === "cartoon" && (
-          <div className="flex items-center gap-2 text-[var(--second)] mb-4">
+        {item?.ct_title ?? item?.book_title ? (
+          <p className="text-2xl font-bold line-clamp-1">
+            {item?.ct_title ?? item?.book_title}
+          </p>
+        ) : (
+          <Skeleton className="h-6 w-64 mt-5" />
+        )}
+        {item?.book_author ?? item?.ct_creator ? (
+          <p className="text-xl mt-2">
+            by{" "}
+            <span className="text-[var(--second)] font-semibold">
+              {item?.book_author ?? item?.ct_creator}
+            </span>
+          </p>
+        ) : (
+          <Skeleton className="h-6 w-64 mt-2" />
+        )}
+        {type === "cartoon" && item?.view_count && item?.published_year && (
+          <div className="flex items-center gap-2 text-[var(--second)] mb-4 mt-3">
             <Image
               src="https://cdn.hugeicons.com/icons/view-stroke-rounded.svg"
               width={25}
@@ -56,21 +64,29 @@ export default function DetailContent({ id }) {
             <p className="text-md font-semibold">{item?.published_year}</p>
           </div>
         )}
-        <p className="text-medium font-medium">
-          {item?.description ?? item?.ct_description}
-        </p>
+        <div>
+          {!(item?.description ?? item?.ct_description) ? (
+            <Skeleton className="h-44 w-full rounded-xl mt-16" />
+          ) : (
+            <p className="text-medium font-medium mt-10">
+              {item?.description ?? item?.ct_description}
+            </p>
+          )}
+        </div>
       </div>
 
-      {item && (
+      {item && (item?.image || item?.ct_image) ? (
         <Image
-          src={item?.image ?? item?.ct_image ?? "/images/placeholder.png"}
+          src={item?.image ?? item?.ct_image}
           width={300}
           height={300}
           className="rounded-lg absolute -top-32 right-20"
           alt={
-            path === "cartoon" ? item?.ct_title : item?.book_title ?? "image"
+            type === "cartoon" ? item?.ct_title : item?.book_title ?? "image"
           }
         />
+      ) : (
+        <Skeleton className="h-[500px] w-[300px] rounded-lg absolute -top-32 right-20" />
       )}
     </>
   );
