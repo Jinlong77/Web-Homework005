@@ -5,6 +5,7 @@ import { SearchIcon } from "@/lib/icon";
 import { Card } from "./card";
 import { Separator } from "./separator";
 import HeaderTagItem from "./headertag";
+import FilterContainer from "./filtercontainer";
 
 export default function SidebarComponent({ children }) {
   return (
@@ -53,9 +54,7 @@ export default function SidebarComponent({ children }) {
             </div>
             <Card className="mx-auto w-full max-w-7xl rounded-xl max-h-[calc(100vh-5rem)] h-full">
               <div className="p-8">
-                <HeaderTagItem />
-                <Separator className="my-4" />
-                <div className="md:mt-10">{children}</div>
+                {children}
               </div>
             </Card>
           </div>

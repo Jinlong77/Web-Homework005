@@ -1,21 +1,30 @@
 "use client";
 
-import React from "react";
 import Image from "next/image";
 import { Button } from "./button";
 import { Card } from "./card";
-import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export default function BookCard3DPage({ books }) {
-  const path = usePathname();
+  const id = useSearchParams().get("query");
+  const categoryId = id ? Number(id) : null;
+
+  let bookFilter = [];
+
+  if (id) {
+    bookFilter = books.filter((book) => {
+      return book.book_cate_id === categoryId;
+    });
+  } else {
+    bookFilter = books;
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4 max-h-[calc(100vh-20rem)] md:max-h-[calc(100vh-27rem)] overflow-auto">
-      {books?.map((book) => (
+      {bookFilter.map((book) => (
         <div key={book.id} className="w-full">
           <BookCard
-            key={book.id}
             id={book.id}
             coverImage={book.image}
             title={book.book_title}
@@ -28,10 +37,9 @@ export default function BookCard3DPage({ books }) {
 }
 
 function BookCard({ id, coverImage, title, description }) {
-
   const type = "book";
 
-  const encodedTitle = encodeURIComponent(title).replace(/%20/g, '+');
+  const encodedTitle = encodeURIComponent(title).replace(/%20/g, "+");
   const encodedName = "book+categories";
 
   const articleUrl = `/read-full-article/${id}?type=${type}&name=${encodedName}&title=${encodedTitle}`;

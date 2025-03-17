@@ -25,6 +25,7 @@ function CartoonCard({ cartoon }) {
     /%20/g,
     "+"
   );
+  
   const encodedName = "old+school+cartoons";
 
   const articleUrl = `/read-full-article/${cartoon.id}?type=${type}&name=${encodedName}&title=${encodedTitle}`;

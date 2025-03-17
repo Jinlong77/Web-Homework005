@@ -1,10 +1,20 @@
 import BookCard3DPage from "@/components/ui/bookcard";
-
 import { fetchBookAll } from "@/services/bookService";
+import FilterContainer from "@/components/ui/filtercontainer";
+import { Separator } from "@/components/ui/separator";
 
-export default async function BookPage() {
+export default async function BookPage({searchParams}) {
   const api = await fetchBookAll();
-  const books = api?.payload || [];
+  const allBooks = api?.payload || [];
+  const id = (await searchParams).query;
 
-  return <BookCard3DPage books={books} />;
+  return (
+    <>
+      <FilterContainer path="/book-categories" />
+      <Separator className="my-4" />
+      <div className="md:mt-10">
+        <BookCard3DPage books={allBooks} />
+      </div>
+    </>
+  );
 }

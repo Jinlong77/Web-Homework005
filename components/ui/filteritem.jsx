@@ -1,44 +1,50 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "./select";
-import { fetchCategoriesBook } from "../../services/bookService";
-import { fetchAllCartoonGenres } from "@/services/cartoonService";
+import { fetchBookByCategoryId } from "@/services/bookService";
+import { fetchCartoonByGenreId } from "@/services/cartoonService";
 
-export default function FilterItem() {
-  const path = usePathname();
-  const [categories, setCategories] = useState([]);
+export default function FilterItem({ categories, path }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [headerTitle, setHeaderTitle] = useState("All Books");
+
+  const bookCategoryId = searchParams.get("query");
+  const cartoonGenreId = searchParams.get("genre");
+  const selectedId = bookCategoryId || cartoonGenreId;
 
   useEffect(() => {
-    async function loadCategories() {
-      try {
-        if (path.includes("/book-categories")) {
-          const bookCategories = await fetchCategoriesBook();
-          setCategories(bookCategories.payload);
-        } else if (path.includes("/old-school-cartoons")) {
-          const cartoonGenres = await fetchAllCartoonGenres();
-          setCategories(cartoonGenres.payload);
-        }
-      } catch (error) {
-        console.error("Error loading categories:", error);
+    if (path === "/") {
+      setHeaderTitle("Homepage");
+    } else if (path.includes("/book-categories")) {
+      setHeaderTitle("All Books");
+    } else if (path.includes("/old-school-cartoons")) {
+      setHeaderTitle("Old School Cartoons");
+    }
+
+    if (selectedId && categories && categories.length > 0) {
+      const selected = categories.find(c => c.id.toString() === selectedId);
+      
+      if (selected) {
+        const name = getCategoryName(selected);
+        setHeaderTitle(name);
       }
     }
-
-    if (path !== "/") {
-      loadCategories();
-    }
-  }, [path]);
+  }, [path, selectedId, categories]);
 
   const getCategoryName = (category) => {
-    if (path.includes("/book-categories")) {
+    if (pathname.includes("/book-categories")) {
       return category.book_cate_name;
     } else {
       return category.cartoon_genre;
@@ -46,10 +52,18 @@ export default function FilterItem() {
   };
 
   const handleCategorySelect = (value) => {
-    if (path.includes("/book-categories")) {
-      
-    } else {
-      
+    if (pathname.includes("/book-categories")) {
+      if (value === "") {
+        router.push("/book-categories");
+      } else {
+        router.push(`/book-categories?query=${value}`);
+      }
+    } else if (pathname.includes("/old-school-cartoons")) {
+      if (value === "") {
+        router.push("/old-school-cartoons");
+      } else {
+        router.push(`/old-school-cartoons?genre=${value}`);
+      }
     }
   };
 
@@ -58,36 +72,34 @@ export default function FilterItem() {
       <div className="flex justify-between">
         <div className="hidden md:block max-w-60 h-10 py-2 px-4 rounded-md shadow-sm border-separate border-[1.7px] border-zinc-200">
           <p className="text-center font-bold text-[var(--second)]">
-            {path === "/"
-              ? "Homepage"
-              : path.includes("/book-categories")
-              ? "All Books"
-              : "Old School Cartoons"}
+            {headerTitle}
           </p>
         </div>
-        {
-          <div className="max-w-48">
-            {path !== "/" && categories && categories.length > 0 && (
-              <Select onValueChange={handleCategorySelect}>
-                <SelectTrigger className="h-10">
-                  <SelectValue placeholder="Filter By Category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {categories.map((category) => (
-                      <SelectItem
-                        key={category.id}
-                        value={category.id.toString()}
-                      >
-                        {getCategoryName(category)}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            )}
-          </div>
-        }
+        <div className="w-48">
+          {path !== "/" && categories && categories.length > 0 && (
+            <Select
+            value={selectedId || ""}
+              onValueChange={handleCategorySelect}
+            >
+              <SelectTrigger className="h-10">
+                <SelectValue placeholder="Filter By Category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>All Categories</SelectLabel>
+                  {categories.map((category) => (
+                    <SelectItem
+                      key={category.id}
+                      value={category.id.toString()}
+                    >
+                      {getCategoryName(category)}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          )}
+        </div>
       </div>
     </>
   );
