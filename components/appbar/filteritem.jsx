@@ -10,9 +10,11 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "./select";
+} from "../ui/select";
+import { fetchCategoriesBook } from "@/services/bookService";
+import { fetchAllCartoonGenres } from "@/services/cartoonService";
 
-export default function FilterItem({ categories }) {
+export default function FilterItem() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -21,6 +23,21 @@ export default function FilterItem({ categories }) {
   const bookCategoryId = searchParams.get("query");
   const cartoonGenreId = searchParams.get("genre");
   const selectedId = bookCategoryId || cartoonGenreId;
+
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    async function loadItems(){
+      if (pathname.includes("/book-categories")) {
+          const bookCategories = await fetchCategoriesBook();
+          setCategories(bookCategories.payload || []);
+        } else if (pathname.includes("/old-school-cartoons")) {
+          const cartoonGenres = await fetchAllCartoonGenres();
+          setCategories(cartoonGenres.payload || []);
+        }
+    }
+    loadItems();
+  }, [pathname]);
 
   useEffect(() => {
     if (pathname === "/") {
@@ -32,14 +49,16 @@ export default function FilterItem({ categories }) {
     }
 
     if (selectedId && categories && categories.length > 0) {
-      const selected = categories.find(c => c.id.toString() === selectedId);
-      
+      const selected = categories.find((c) => c.id.toString() === selectedId);
+
       if (selected) {
         const name = getCategoryName(selected);
         setHeaderTitle(name);
       }
     }
-  }, [pathname, selectedId, categories]);
+  }, [selectedId, categories, pathname]);
+
+  
 
   const getCategoryName = (category) => {
     if (pathname.includes("/book-categories")) {
@@ -74,9 +93,9 @@ export default function FilterItem({ categories }) {
           </p>
         </div>
         <div className="w-48">
-          {pathname !== "/" && categories && categories.length > 0 && (
+          {pathname !== "/" && (
             <Select
-            value={selectedId || ""}
+              value={selectedId || ""}
               onValueChange={handleCategorySelect}
             >
               <SelectTrigger className="h-10">

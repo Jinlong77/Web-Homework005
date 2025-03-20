@@ -1,13 +1,11 @@
-
-import DetailContent from "@/components/ui/detailcontent";
+import DetailContent from "@/components/detail/detailcontent";
 
 export default async function DetailPage({ params }) {
-
-    const { id } = await params;
+  const { id } = await params;
 
   return (
     <>
-        <DetailContent id={id}/>
+      <DetailContent id={id} />
     </>
   );
 }

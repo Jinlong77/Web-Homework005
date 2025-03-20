@@ -1,13 +1,9 @@
-import DetailProvider from "@/components/ui/detailprovider";
+import DetailProvider from "@/components/detail/detailprovider";
 
-
-
-export default function LayoutDetailPage({children}) {
+export default function LayoutDetailPage({ children }) {
   return (
     <>
-      <DetailProvider>
-        {children}
-      </DetailProvider>
+      <DetailProvider>{children}</DetailProvider>
     </>
   );
 }

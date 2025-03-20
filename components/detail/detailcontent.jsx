@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { fetchCartoonById } from "@/services/cartoonService";
 import { fetchBookById } from "@/services/bookService";
-import { Skeleton } from "./skeleton";
+import { Skeleton } from "../ui/skeleton";
 
 export default function DetailContent({ id }) {
   const path = useSearchParams();

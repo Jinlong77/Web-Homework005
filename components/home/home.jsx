@@ -1,9 +1,11 @@
+import AppSidebar from "../appbar/appsidebar";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "../ui/sidebar";
 
-import AppSidebar from "./appsidebar";
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "./sidebar";
-
-import { Card } from "./card";
-import Search from "./search";
+import { Card } from "../ui/card";
+import Search from "../ui/search";
+import FilterItem from "../appbar/filteritem";
+import { Separator } from "../ui/separator";
+import BookCard3DPage from "../book/bookcard";
 
 export default function SidebarComponent({ children }) {
   return (
@@ -23,7 +25,11 @@ export default function SidebarComponent({ children }) {
             </div>
             <Card className="mx-auto w-full max-w-7xl rounded-xl max-h-[calc(100vh-5rem)] h-full">
               <div className="p-8">
-                {children}
+                <FilterItem />
+                <Separator className="my-4" />
+                <div className="md:mt-10">
+                  {children}
+                </div>
               </div>
             </Card>
           </div>

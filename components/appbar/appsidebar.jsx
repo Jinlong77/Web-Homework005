@@ -5,11 +5,10 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarHeader,
-  SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "./sidebar";
+} from "../ui/sidebar";
 import Image from "next/image";
 
 export default function AppSidebar() {

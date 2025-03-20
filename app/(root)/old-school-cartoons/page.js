@@ -1,6 +1,4 @@
-import CartoonContent from "@/components/ui/cartooncontent";
-import FilterContainer from "@/components/ui/filtercontainer";
-import { Separator } from "@/components/ui/separator";
+import CartoonContent from "@/components/cartoon/cartooncontent";
 import { fetchCartoonAll } from "@/services/cartoonService";
 
 export default async function CartoonsPage({ searchParams }) {
@@ -11,11 +9,7 @@ export default async function CartoonsPage({ searchParams }) {
 
   return (
     <>
-      <FilterContainer path="/old-school-cartoons" />
-      <Separator className="my-4" />
-      <div className="md:mt-10">
-        <CartoonContent cartoons={cartoons} id={id} searchQuery={searchQuery} />
-      </div>
+      <CartoonContent cartoons={cartoons} id={id} searchQuery={searchQuery} />
     </>
   );
 }

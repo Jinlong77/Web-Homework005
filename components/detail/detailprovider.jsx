@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { Card } from "./card";
+import { Card } from "../ui/card";
 
 export default function DetailProvider({ children }) {
   const path = useSearchParams();

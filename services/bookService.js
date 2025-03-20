@@ -71,21 +71,3 @@ export const searchBookByTitle = async (title) => {
     return [];
   }
 };
-
-export const filterBookByCategoryId = async (id) => {
-  try {
-    const apiUrl = process.env.API_URL;
-    const response = await fetch(`${apiUrl}/book_category/search?query=${id}`);
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch book: ${response.status} ${response.statusText}`
-      );
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching book:", error);
-    return [];
-  }
-};

@@ -71,21 +71,3 @@ export const fetchAllCartoonGenres = async () => {
     return [];
   }
 };
-
-export const fetchCartoonByGenreId = async (id) => {
-  try {
-    const apiUrl = process.env.API_URL;
-    const response = await fetch(`${apiUrl}/cartoon_genre/${id}`);
-
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch genre: ${response.status} ${response.statusText}`
-      );
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error fetching genre:", error);
-    return [];
-  }
-};

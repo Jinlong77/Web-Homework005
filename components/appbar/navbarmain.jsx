@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { SidebarMenuButton, SidebarMenuItem } from "./sidebar";
+import { SidebarMenuButton, SidebarMenuItem } from "../ui/sidebar";
 import { initialNavbar } from "../../lib/icon";
 import { usePathname } from "next/navigation";
 

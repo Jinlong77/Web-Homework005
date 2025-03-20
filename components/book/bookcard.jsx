@@ -1,7 +1,6 @@
-
 import Image from "next/image";
-import { Button } from "./button";
-import { Card } from "./card";
+import { Button } from "../ui/button";
+import { Card } from "../ui/card";
 import Link from "next/link";
 
 export default function BookCard3DPage({ books, id, searchQuery }) {

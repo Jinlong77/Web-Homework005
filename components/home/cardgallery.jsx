@@ -1,30 +1,28 @@
-
 import Image from "next/image";
 import React from "react";
-import { Button } from "./button";
-import { Card } from "./card";
+import { Button } from "../ui/button";
+import { Card } from "../ui/card";
 import Link from "next/link";
 
 export default async function CardGallery() {
-
   return (
     <div className="flex justify-center items-center min-h-[60vh] w-full px-4">
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 w-full max-w-[1400px] mx-auto">
-      <CardComponent
-        imageUrl="https://thesmartlocal.jp/wp-content/uploads/2023/02/Japanese-anime-movies-4.jpeg"
-        title="Books"
-        description="View All Available Books"
-        navigate="/book-categories"
-      />
-      <CardComponent
-        imageUrl="https://thesmartlocal.jp/wp-content/uploads/2020/03/Top-Anime-Movies-1.jpg"
-        title="Cartoons"
-        description="View All Available Cartoons"
-        navigate="/old-school-cartoons"
-      />
+        <CardComponent
+          imageUrl="https://thesmartlocal.jp/wp-content/uploads/2023/02/Japanese-anime-movies-4.jpeg"
+          title="Books"
+          description="View All Available Books"
+          navigate="/book-categories"
+        />
+        <CardComponent
+          imageUrl="https://thesmartlocal.jp/wp-content/uploads/2020/03/Top-Anime-Movies-1.jpg"
+          title="Cartoons"
+          description="View All Available Cartoons"
+          navigate="/old-school-cartoons"
+        />
       </div>
     </div>
-    );
+  );
 }
 
 export function CardComponent({ imageUrl, title, description, navigate }) {
